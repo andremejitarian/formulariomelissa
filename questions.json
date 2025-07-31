@@ -1,0 +1,51 @@
+[
+  {
+    "id": "q1",
+    "statement": "Eu me sinto confortável ao expressar minhas emoções para outras pessoas.",
+    "leftLabel": "Discordo totalmente",
+    "rightLabel": "Concordo plenamente",
+    "instructions": "Considere suas interações sociais mais frequentes ao responder."
+  },
+  {
+    "id": "q2",
+    "statement": "Tenho facilidade para me adaptar a mudanças inesperadas.",
+    "leftLabel": "Discordo totalmente",
+    "rightLabel": "Concordo plenamente",
+    "instructions": ""
+  },
+  {
+    "id": "q3",
+    "statement": "Costumo me preocupar excessivamente com situações futuras.",
+    "leftLabel": "Discordo totalmente",
+    "rightLabel": "Concordo plenamente",
+    "instructions": "Pense em sua tendência geral de preocupação, não apenas momentos específicos."
+  },
+  {
+    "id": "q4",
+    "statement": "Sinto que tenho controle sobre a maioria dos aspectos da minha vida.",
+    "leftLabel": "Discordo totalmente",
+    "rightLabel": "Concordo plenamente",
+    "instructions": ""
+  },
+  {
+    "id": "q5",
+    "statement": "Prefiro trabalhar em equipe do que individualmente.",
+    "leftLabel": "Discordo totalmente",
+    "rightLabel": "Concordo plenamente",
+    "instructions": "Considere tanto o ambiente profissional quanto pessoal."
+  },
+  {
+    "id": "q6",
+    "statement": "Consigo manter o foco mesmo em ambientes com muitas distrações.",
+    "leftLabel": "Discordo totalmente",
+    "rightLabel": "Concordo plenamente",
+    "instructions": ""
+  },
+  {
+    "id": "q7",
+    "statement": "Acredito que minhas ações podem fazer diferença no mundo.",
+    "leftLabel": "Discordo totalmente",
+    "rightLabel": "Concordo plenamente",
+    "instructions": "Reflita sobre seu senso de propósito e impacto pessoal."
+  }
+]
