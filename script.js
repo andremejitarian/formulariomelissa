@@ -172,6 +172,25 @@ class PsychologySurvey {
     setupEventListeners() {
         const form = document.getElementById('survey-form');
         form.addEventListener('submit', this.handleSubmit.bind(this));
+
+        // --- INÍCIO DA MODIFICAÇÃO PARA MENSAGEM DE ALERTA EM PORTUGUÊS ---
+        const userNameInput = document.getElementById('userName');
+
+        if (userNameInput) { // Verifica se o elemento existe para evitar erros
+            // Quando o campo for considerado inválido pelo navegador (ex: ao tentar submeter vazio)
+            userNameInput.addEventListener('invalid', function(event) {
+                // Previne a mensagem padrão do navegador (em inglês)
+                event.preventDefault();
+                // Define a nova mensagem em português
+                userNameInput.setCustomValidity("Por favor, preencha este campo com seu nome.");
+            });
+
+            // Quando o usuário começar a digitar, limpa a mensagem de erro para que ela não fique aparecendo se ele corrigiu
+            userNameInput.addEventListener('input', function() {
+                userNameInput.setCustomValidity(""); // Limpa a mensagem personalizada, permitindo a validação normal
+            });
+        }
+        // --- FIM DA MODIFICAÇÃO ---
     }
 
     async handleSubmit(e) { // Alterado para async para poder usar await
@@ -185,7 +204,9 @@ class PsychologySurvey {
         const userName = userNameInput.value.trim();
 
         if (!userName) {
-            alert('Por favor, digite seu nome antes de enviar.');
+            // A validação de mensagem personalizada do navegador já cuidará disso, mas
+            // esta checagem extra pode ser mantida para sua lógica se preferir.
+            // alert('Por favor, digite seu nome antes de enviar.'); // Esta linha pode ser removida se o setCustomValidity for suficiente
             userNameInput.focus();
             return;
         }
@@ -207,7 +228,7 @@ class PsychologySurvey {
             totalQuestions: this.questions.length
         };
 
-        console.log('📊 Dados da Pesquisa:', surveyData);
+        console.log('�� Dados da Pesquisa:', surveyData);
         
         // Inicia o processo de envio
         submitBtn.innerHTML = '<span class="spinner"></span> Enviando...';
