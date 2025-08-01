@@ -1,5 +1,6 @@
 class PsychologySurvey {
     // IMPORTANTE: SUBSTITUA ESTA URL PELA URL DO SEU WEBHOOK DO N8N
+    static WEBHOOK_URL = 'https://criadordigital-n8n-editor.kttqgl.easypanel.host/webhook-test/e76ff5ad-c383-4d45-a1b3-8ef1964b488d'; 
     static WEBHOOK_URL = 'https://criadordigital-n8n-webhook.kttqgl.easypanel.host/webhook/e76ff5ad-c383-4d45-a1b3-8ef1964b488d'; 
 
     constructor() {
@@ -7,7 +8,7 @@ class PsychologySurvey {
         this.responses = {};
         this.isDragging = false;
         this.currentSlider = null;
-        
+
         this.init();
     }
 
@@ -43,7 +44,7 @@ class PsychologySurvey {
         this.questions.forEach((question, index) => {
             const questionElement = this.createQuestionElement(question, index + 1);
             container.appendChild(questionElement);
-            
+
             // Inicializar slider
             this.initializeSlider(question.id);
         });
@@ -97,7 +98,7 @@ class PsychologySurvey {
         // Event listeners
         thumb.addEventListener('mousedown', (e) => this.startDrag(e, questionId));
         thumb.addEventListener('touchstart', (e) => this.startDrag(e, questionId), { passive: false });
-        
+
         track.addEventListener('mousedown', (e) => this.clickToPosition(e, questionId));
         track.addEventListener('touchstart', (e) => this.clickToPosition(e, questionId), { passive: false });
     }
@@ -128,7 +129,7 @@ class PsychologySurvey {
         if (!this.isDragging) return;
 
         this.isDragging = false;
-        
+
         if (this.currentSlider) {
             const thumb = document.getElementById(`thumb-${this.currentSlider}`);
             thumb.classList.remove('dragging');
@@ -145,7 +146,7 @@ class PsychologySurvey {
 
     clickToPosition(e, questionId) {
         if (e.target.classList.contains('slider-thumb')) return;
-        
+
         this.updateSliderPosition(e, questionId);
     }
 
@@ -157,12 +158,12 @@ class PsychologySurvey {
 
         const rect = track.getBoundingClientRect();
         const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-        
+
         let position = (clientX - rect.left) / rect.width;
         position = Math.max(0, Math.min(1, position)); // Limitar entre 0 e 1
 
         const percentage = Math.round(position * 100);
-        
+
         thumb.style.left = `${position * 100}%`;
         valueDisplay.textContent = percentage;
         input.value = percentage;
@@ -172,62 +173,43 @@ class PsychologySurvey {
     setupEventListeners() {
         const form = document.getElementById('survey-form');
         form.addEventListener('submit', this.handleSubmit.bind(this));
-
-        // --- INÍCIO DA MODIFICAÇÃO PARA MENSAGEM DE ALERTA EM PORTUGUÊS ---
-        const userNameInput = document.getElementById('userName');
-
-        if (userNameInput) { // Verifica se o elemento existe para evitar erros
-            // Quando o campo for considerado inválido pelo navegador (ex: ao tentar submeter vazio)
-            userNameInput.addEventListener('invalid', function(event) {
-                // Previne a mensagem padrão do navegador (em inglês)
-                event.preventDefault();
-                // Define a nova mensagem em português
-                userNameInput.setCustomValidity("Por favor, preencha este campo com seu nome.");
-            });
-
-            // Quando o usuário começar a digitar, limpa a mensagem de erro para que ela não fique aparecendo se ele corrigiu
-            userNameInput.addEventListener('input', function() {
-                userNameInput.setCustomValidity(""); // Limpa a mensagem personalizada, permitindo a validação normal
-            });
-        }
-        // --- FIM DA MODIFICAÇÃO ---
     }
 
-    async handleSubmit(e) { 
+    async handleSubmit(e) { // Alterado para async para poder usar await
         e.preventDefault();
-        
+
         const submitBtn = document.querySelector('.submit-btn');
         const originalText = submitBtn.innerHTML;
-        
-        // NOVO: Capturar o nome do usuário
+
+        // ATUALIZADO: Capturar o nome do usuário com mensagem em português
         const userNameInput = document.getElementById('userName');
         const userName = userNameInput.value.trim();
 
-        // REMOVIDO: A verificação manual do userName.
-        // Agora, a validação de campo obrigatório será tratada pelo navegador
-        // graças ao atributo 'required' no HTML e ao 'setCustomValidity' no setupEventListeners.
-        // Se o campo estiver vazio, o navegador exibirá a mensagem personalizada
-        // e impedirá a execução do restante da função automaticamente.
+        if (!userName) {
+            alert('⚠️ Nome obrigatório!\n\nPor favor, preencha seu nome antes de enviar o questionário.');
+            userNameInput.focus();
+            return;
+        }
 
         // Validar se todas as perguntas foram respondidas
         // Percorre as perguntas carregadas e verifica se há uma resposta para cada uma
         const unanswered = this.questions.filter(q => this.responses[q.id] === undefined);
-        
+
         if (unanswered.length > 0) {
-            alert('Por favor, responda todas as perguntas antes de enviar.');
+            alert('⚠️ Questionário incompleto!\n\nPor favor, responda todas as perguntas antes de enviar.');
             return;
         }
 
         // Preparar dados para envio, incluindo o nome e as respostas
         const surveyData = {
-            userName: userName, // O userName é capturado aqui para o payload, mas a validação de obrigatoriedade é nativa
+            userName: userName,
             timestamp: new Date().toISOString(),
             responses: this.responses, // Este objeto contém as respostas formatadas como { "q1": 75, "q2": 50, ... }
             totalQuestions: this.questions.length
         };
 
         console.log('📊 Dados da Pesquisa:', surveyData);
-        
+
         // Inicia o processo de envio
         submitBtn.innerHTML = '<span class="spinner"></span> Enviando...';
         submitBtn.disabled = true;
@@ -237,26 +219,28 @@ class PsychologySurvey {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json' 
+                    'Accept': 'application/json' // Opcional, para indicar que espera JSON como resposta
                 },
-                body: JSON.stringify(surveyData) 
+                body: JSON.stringify(surveyData) // Converte o objeto JavaScript em uma string JSON
             });
 
-            if (response.ok) { 
+            if (response.ok) { // Verifica se a resposta HTTP foi bem-sucedida (status 200-299)
                 alert('✅ Respostas enviadas com sucesso!\n\nObrigado por participar da pesquisa.');
-                console.log('Resposta do Webhook:', await response.json()); 
-                this.resetForm(); 
+                console.log('Resposta do Webhook:', await response.json()); // Mostra a resposta do n8n (pode ser um JSON)
+                this.resetForm(); // Reseta o formulário após o sucesso
             } else {
-                const errorData = await response.json(); 
+                // Trata erros de resposta HTTP (ex: 400, 500)
+                const errorData = await response.json(); // Tenta ler a resposta de erro como JSON
                 alert(`❌ Erro ao enviar respostas: ${response.status} - ${errorData.message || 'Ocorreu um problema no servidor.'}`);
                 console.error('Erro de resposta do Webhook:', response.status, errorData);
             }
         } catch (error) {
+            // Trata erros de rede (ex: URL incorreta, sem conexão)
             alert('❌ Erro de conexão: Não foi possível enviar as respostas. Verifique sua conexão ou a URL do webhook.');
             console.error('Erro na requisição Fetch:', error);
         } finally {
-            submitBtn.innerHTML = originalText; 
-            submitBtn.disabled = false; 
+            submitBtn.innerHTML = originalText; // Restaura o texto original do botão
+            submitBtn.disabled = false; // Habilita o botão novamente
         }
     }
 
@@ -289,7 +273,7 @@ class PsychologySurvey {
             const thumb = document.getElementById(`thumb-${question.id}`);
             const valueDisplay = document.getElementById(`value-${question.id}`);
             const input = document.getElementById(`input-${question.id}`);
-            
+
             if (thumb && valueDisplay && input) {
                 thumb.style.left = '50%';
                 valueDisplay.textContent = '50';
