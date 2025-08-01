@@ -1,4 +1,7 @@
 class PsychologySurvey {
+    // IMPORTANTE: SUBSTITUA ESTA URL PELA URL DO SEU WEBHOOK DO N8N
+    static WEBHOOK_URL = 'https://criadordigital-n8n-editor.kttqgl.easypanel.host/webhook-test/e76ff5ad-c383-4d45-a1b3-8ef1964b488d'; 
+
     constructor() {
         this.questions = [];
         this.responses = {};
@@ -163,7 +166,7 @@ class PsychologySurvey {
         thumb.style.left = `${position * 100}%`;
         valueDisplay.textContent = percentage;
         input.value = percentage;
-        this.responses[questionId] = percentage;
+        this.responses[questionId] = percentage; // Isso armazena a resposta para cada pergunta.
     }
 
     setupEventListeners() {
@@ -171,20 +174,24 @@ class PsychologySurvey {
         form.addEventListener('submit', this.handleSubmit.bind(this));
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) { // Alterado para async para poder usar await
         e.preventDefault();
+        
+        const submitBtn = document.querySelector('.submit-btn');
+        const originalText = submitBtn.innerHTML;
         
         // NOVO: Capturar o nome do usuário
         const userNameInput = document.getElementById('userName');
-        const userName = userNameInput.value.trim(); // .trim() remove espaços em branco extras
+        const userName = userNameInput.value.trim();
 
         if (!userName) {
             alert('Por favor, digite seu nome antes de enviar.');
-            userNameInput.focus(); // Coloca o foco no campo do nome
+            userNameInput.focus();
             return;
         }
 
         // Validar se todas as perguntas foram respondidas
+        // Percorre as perguntas carregadas e verifica se há uma resposta para cada uma
         const unanswered = this.questions.filter(q => this.responses[q.id] === undefined);
         
         if (unanswered.length > 0) {
@@ -192,37 +199,48 @@ class PsychologySurvey {
             return;
         }
 
-        // Preparar dados para envio, incluindo o nome
+        // Preparar dados para envio, incluindo o nome e as respostas
         const surveyData = {
-            userName: userName, // Adiciona o nome do usuário aqui
+            userName: userName,
             timestamp: new Date().toISOString(),
-            responses: this.responses,
+            responses: this.responses, // Este objeto contém as respostas formatadas como { "q1": 75, "q2": 50, ... }
             totalQuestions: this.questions.length
         };
 
-        console.log('�� Dados da Pesquisa:', surveyData);
+        console.log('📊 Dados da Pesquisa:', surveyData);
         
-        // Simular envio
-        this.simulateSubmission(surveyData);
-    }
-
-    simulateSubmission(data) {
-        const submitBtn = document.querySelector('.submit-btn');
-        const originalText = submitBtn.innerHTML;
-        
+        // Inicia o processo de envio
         submitBtn.innerHTML = '<span class="spinner"></span> Enviando...';
         submitBtn.disabled = true;
 
-        setTimeout(() => {
-            alert('✅ Respostas enviadas com sucesso!\n\nObrigado por participar da pesquisa.');
-            console.log('Dados enviados:', data);
-            
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-            
-            // Opcional: resetar formulário ou redirecionar
-            // this.resetForm(); // Você pode considerar um reset que limpe também o campo do nome
-        }, 2000);
+        try {
+            const response = await fetch(PsychologySurvey.WEBHOOK_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json' // Opcional, para indicar que espera JSON como resposta
+                },
+                body: JSON.stringify(surveyData) // Converte o objeto JavaScript em uma string JSON
+            });
+
+            if (response.ok) { // Verifica se a resposta HTTP foi bem-sucedida (status 200-299)
+                alert('✅ Respostas enviadas com sucesso!\n\nObrigado por participar da pesquisa.');
+                console.log('Resposta do Webhook:', await response.json()); // Mostra a resposta do n8n (pode ser um JSON)
+                this.resetForm(); // Reseta o formulário após o sucesso
+            } else {
+                // Trata erros de resposta HTTP (ex: 400, 500)
+                const errorData = await response.json(); // Tenta ler a resposta de erro como JSON
+                alert(`❌ Erro ao enviar respostas: ${response.status} - ${errorData.message || 'Ocorreu um problema no servidor.'}`);
+                console.error('Erro de resposta do Webhook:', response.status, errorData);
+            }
+        } catch (error) {
+            // Trata erros de rede (ex: URL incorreta, sem conexão)
+            alert('❌ Erro de conexão: Não foi possível enviar as respostas. Verifique sua conexão ou a URL do webhook.');
+            console.error('Erro na requisição Fetch:', error);
+        } finally {
+            submitBtn.innerHTML = originalText; // Restaura o texto original do botão
+            submitBtn.disabled = false; // Habilita o botão novamente
+        }
     }
 
     hideLoading() {
@@ -242,19 +260,20 @@ class PsychologySurvey {
     }
 
     resetForm() {
-        // NOVO: Resetar o campo do nome
+        // Resetar o campo do nome
         const userNameInput = document.getElementById('userName');
         if (userNameInput) {
             userNameInput.value = '';
         }
 
+        // Resetar as respostas e os sliders
         this.responses = {};
         this.questions.forEach(question => {
             const thumb = document.getElementById(`thumb-${question.id}`);
             const valueDisplay = document.getElementById(`value-${question.id}`);
             const input = document.getElementById(`input-${question.id}`);
             
-            if (thumb && valueDisplay && input) { // Adicionado verificação para garantir que os elementos existem
+            if (thumb && valueDisplay && input) {
                 thumb.style.left = '50%';
                 valueDisplay.textContent = '50';
                 input.value = '50';
