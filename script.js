@@ -1,6 +1,6 @@
 class PsychologySurvey {
     // IMPORTANTE: SUBSTITUA ESTA URL PELA URL DO SEU WEBHOOK DO N8N
-    static WEBHOOK_URL = 'https://criadordigital-n8n-editor.kttqgl.easypanel.host/webhook-test/e76ff5ad-c383-4d45-a1b3-8ef1964b488d'; 
+    static WEBHOOK_URL = 'https://criadordigital-n8n-webhook.kttqgl.easypanel.host/webhook/e76ff5ad-c383-4d45-a1b3-8ef1964b488d'; 
 
     constructor() {
         this.questions = [];
