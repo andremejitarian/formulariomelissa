@@ -2,149 +2,148 @@
   {
     "id": "q1",
     "statement": "Sinto-me capaz de ajudar uma pessoa que tentou se matar",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q2",
     "statement": "Quem fica a ameaçar, geralmente não se mata",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q3",
     "statement": "Apesar de tudo, penso que, se uma pessoa deseja se matar, ela tem esse direito",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q4",
     "statement": "Diante de um suicídio penso: se alguém tivesse conversado, a pessoa teria encontrado outro caminho",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q5",
     "statement": "No fundo, prefiro não me envolver muito com pacientes que tentaram o suicídio",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q6",
     "statement": "A vida é um dom de Deus, e só Ele pode tirar",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q7",
     "statement": "Sinto-me capaz de perceber quando um paciente tem risco de se matar",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q8",
     "statement": "Geralmente, quem se mata tem alguma doença mental",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q9",
     "statement": "Tenho receio de perguntar sobre idéias de suicídio, e acabar induzindo o paciente a isso",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q10",
     "statement": "Tenho preparo profissional para lidar com pacientes com risco de suicídio",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q11",
     "statement": "É preciso ter certa dose de coragem para se matar",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q12",
     "statement": "Sinto-me inseguro(a) para cuidar de pacientes com risco de suicídio",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q13",
     "statement": "No fundo, às vezes dá até raiva, porque tanta gente querendo viver... e aquele paciente querendo morrer",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q14",
     "statement": "Se eu sugerir uma interconsulta psiquiátrica para um paciente que falou em se matar, penso que isso será bem aceito pelo seu médico assistente",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q15",
     "statement": "A gente se sente impotente diante de uma pessoa que quer se matar",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q16",
     "statement": "Quem tem Deus no coração, não vai tentar se matar",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q17",
     "statement": "No caso de pacientes que estejam sofrendo muito devido a uma doença física, acho mais aceitável a idéia de suicídio",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q18",
     "statement": "Quando uma pessoa fala de por fim à vida, tento tirar aquilo da cabeça dela",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q19",
-    "statement": "Quem quer se matar mesmo, não fica \"tentando\" se matar",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "statement": "Quem quer se matar mesmo, não fica "tentando" se matar",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q20",
     "statement": "Um paciente internado dificilmente se mata sem que tenha um forte motivo pra isso",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   },
   {
     "id": "q21",
     "statement": "Eu já passei por situações que me fizeram pensar em cometer suicídio",
-    "leftLabel": "Discordo totalmente",
-    "rightLabel": "Concordo plenamente",
+    "leftLabel": "Discordo",
+    "rightLabel": "Concordo",
     "instructions": ""
   }
 ]
-```
