@@ -193,7 +193,7 @@ class PsychologySurvey {
         // --- FIM DA MODIFICAÇÃO ---
     }
 
-    async handleSubmit(e) { // Alterado para async para poder usar await
+    async handleSubmit(e) { 
         e.preventDefault();
         
         const submitBtn = document.querySelector('.submit-btn');
@@ -203,13 +203,11 @@ class PsychologySurvey {
         const userNameInput = document.getElementById('userName');
         const userName = userNameInput.value.trim();
 
-        if (!userName) {
-            // A validação de mensagem personalizada do navegador já cuidará disso, mas
-            // esta checagem extra pode ser mantida para sua lógica se preferir.
-            // alert('Por favor, digite seu nome antes de enviar.'); // Esta linha pode ser removida se o setCustomValidity for suficiente
-            userNameInput.focus();
-            return;
-        }
+        // REMOVIDO: A verificação manual do userName.
+        // Agora, a validação de campo obrigatório será tratada pelo navegador
+        // graças ao atributo 'required' no HTML e ao 'setCustomValidity' no setupEventListeners.
+        // Se o campo estiver vazio, o navegador exibirá a mensagem personalizada
+        // e impedirá a execução do restante da função automaticamente.
 
         // Validar se todas as perguntas foram respondidas
         // Percorre as perguntas carregadas e verifica se há uma resposta para cada uma
@@ -222,13 +220,13 @@ class PsychologySurvey {
 
         // Preparar dados para envio, incluindo o nome e as respostas
         const surveyData = {
-            userName: userName,
+            userName: userName, // O userName é capturado aqui para o payload, mas a validação de obrigatoriedade é nativa
             timestamp: new Date().toISOString(),
             responses: this.responses, // Este objeto contém as respostas formatadas como { "q1": 75, "q2": 50, ... }
             totalQuestions: this.questions.length
         };
 
-        console.log('�� Dados da Pesquisa:', surveyData);
+        console.log('📊 Dados da Pesquisa:', surveyData);
         
         // Inicia o processo de envio
         submitBtn.innerHTML = '<span class="spinner"></span> Enviando...';
@@ -239,28 +237,26 @@ class PsychologySurvey {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json' // Opcional, para indicar que espera JSON como resposta
+                    'Accept': 'application/json' 
                 },
-                body: JSON.stringify(surveyData) // Converte o objeto JavaScript em uma string JSON
+                body: JSON.stringify(surveyData) 
             });
 
-            if (response.ok) { // Verifica se a resposta HTTP foi bem-sucedida (status 200-299)
+            if (response.ok) { 
                 alert('✅ Respostas enviadas com sucesso!\n\nObrigado por participar da pesquisa.');
-                console.log('Resposta do Webhook:', await response.json()); // Mostra a resposta do n8n (pode ser um JSON)
-                this.resetForm(); // Reseta o formulário após o sucesso
+                console.log('Resposta do Webhook:', await response.json()); 
+                this.resetForm(); 
             } else {
-                // Trata erros de resposta HTTP (ex: 400, 500)
-                const errorData = await response.json(); // Tenta ler a resposta de erro como JSON
+                const errorData = await response.json(); 
                 alert(`❌ Erro ao enviar respostas: ${response.status} - ${errorData.message || 'Ocorreu um problema no servidor.'}`);
                 console.error('Erro de resposta do Webhook:', response.status, errorData);
             }
         } catch (error) {
-            // Trata erros de rede (ex: URL incorreta, sem conexão)
             alert('❌ Erro de conexão: Não foi possível enviar as respostas. Verifique sua conexão ou a URL do webhook.');
             console.error('Erro na requisição Fetch:', error);
         } finally {
-            submitBtn.innerHTML = originalText; // Restaura o texto original do botão
-            submitBtn.disabled = false; // Habilita o botão novamente
+            submitBtn.innerHTML = originalText; 
+            submitBtn.disabled = false; 
         }
     }
 
