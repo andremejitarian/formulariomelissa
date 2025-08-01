@@ -538,4 +538,55 @@ body {
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
     }
+
+/* CORREÇÃO: Cards de exemplo vazando da caixa "Como responder" */
+.instructions-section {
+    /* Garante que a altura se ajuste ao conteúdo */
+    min-height: auto;
+    height: auto;
+    
+    /* Garante que o overflow seja visível */
+    overflow: visible;
+    
+    /* Adiciona um pouco mais de padding inferior para dar respiro */
+    padding-bottom: 2.5rem;
+}
+
+.instruction-examples {
+    /* Garante que o grid se ajuste ao conteúdo */
+    grid-template-rows: auto auto;
+    
+    /* Adiciona um pouco mais de espaço entre os exemplos */
+    gap: 2rem;
+}
+
+.example-item {
+    /* Garante que cada item se ajuste ao seu conteúdo */
+    height: auto;
+    min-height: auto;
+    
+    /* Adiciona um pouco mais de padding para dar respiro */
+    padding: 1.75rem;
+    
+    /* Garante que não haja overflow oculto */
+    overflow: visible;
+}
+
+/* CORREÇÃO ADICIONAL: Ajusta o espaçamento dos sliders de exemplo */
+.example-slider {
+    /* Adiciona mais espaço vertical para os sliders */
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+}
+
+.example-track {
+    /* Garante que o track seja totalmente visível */
+    overflow: visible;
+    margin: 0.25rem 0;
+}
+
+.example-thumb {
+    /* Garante que o thumb seja totalmente visível */
+    z-index: 15;
+}
 }
