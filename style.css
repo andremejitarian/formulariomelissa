@@ -494,4 +494,53 @@ body {
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
     }
+/* Estilos para o campo de nome (input e label) */
+.form-group {
+    margin-bottom: 1.5rem; /* Ajuste a margem inferior para o espaçamento entre o campo nome e a primeira pergunta */
+}
+
+.form-group label {
+    display: block; /* Garante que o label fique em sua própria linha */
+    margin-bottom: 0.75rem; /* Espaço entre o label e o campo de input */
+    font-size: 1.1rem; /* Tamanho da fonte similar ao das perguntas */
+    font-weight: 500; /* Peso da fonte */
+    color: var(--text-primary); /* Cor do texto */
+    text-align: center; /* Centraliza o texto do label, se desejar */
+}
+
+.form-group input[type="text"] {
+    width: 100%; /* Ocupa a largura total do contêiner */
+    padding: 1rem 1.25rem; /* Preenchimento interno para o input */
+    border: 1px solid var(--border); /* Borda padrão */
+    border-radius: var(--radius-sm); /* Arredondamento das bordas */
+    font-size: 1rem; /* Tamanho da fonte para o texto digitado */
+    color: var(--text-primary); /* Cor do texto digitado */
+    background-color: var(--surface); /* Fundo branco */
+    box-shadow: var(--shadow-sm); /* Sombra suave */
+    transition: all 0.2s ease; /* Transição para efeitos de foco */
+}
+
+.form-group input[type="text"]::placeholder {
+    color: var(--text-secondary); /* Cor do texto de placeholder */
+    opacity: 0.7;
+}
+
+.form-group input[type="text"]:focus {
+    outline: none; /* Remove a borda de foco padrão do navegador */
+    border-color: var(--primary-color); /* Borda colorida ao focar */
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); /* Sombra de foco colorida */
+}
+
+/* Ajustes de responsividade para o campo de nome em telas menores */
+@media (max-width: 768px) {
+    .form-group label {
+        font-size: 1rem; /* Um pouco menor para mobile */
+        margin-bottom: 0.5rem;
+    }
+    .form-group input[type="text"] {
+        padding: 0.8rem 1rem; /* Ajustar padding para mobile */
+    }
+    .form-group.question-item {
+        padding: 1.5rem; /* Garante que o padding seja consistente com outras perguntas em mobile */
+    }
 }
