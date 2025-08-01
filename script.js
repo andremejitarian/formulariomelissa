@@ -174,6 +174,16 @@ class PsychologySurvey {
     handleSubmit(e) {
         e.preventDefault();
         
+        // NOVO: Capturar o nome do usuário
+        const userNameInput = document.getElementById('userName');
+        const userName = userNameInput.value.trim(); // .trim() remove espaços em branco extras
+
+        if (!userName) {
+            alert('Por favor, digite seu nome antes de enviar.');
+            userNameInput.focus(); // Coloca o foco no campo do nome
+            return;
+        }
+
         // Validar se todas as perguntas foram respondidas
         const unanswered = this.questions.filter(q => this.responses[q.id] === undefined);
         
@@ -182,14 +192,15 @@ class PsychologySurvey {
             return;
         }
 
-        // Preparar dados para envio
+        // Preparar dados para envio, incluindo o nome
         const surveyData = {
+            userName: userName, // Adiciona o nome do usuário aqui
             timestamp: new Date().toISOString(),
             responses: this.responses,
             totalQuestions: this.questions.length
         };
 
-        console.log('📊 Dados da Pesquisa:', surveyData);
+        console.log('�� Dados da Pesquisa:', surveyData);
         
         // Simular envio
         this.simulateSubmission(surveyData);
@@ -210,7 +221,7 @@ class PsychologySurvey {
             submitBtn.disabled = false;
             
             // Opcional: resetar formulário ou redirecionar
-            // this.resetForm();
+            // this.resetForm(); // Você pode considerar um reset que limpe também o campo do nome
         }, 2000);
     }
 
@@ -231,16 +242,24 @@ class PsychologySurvey {
     }
 
     resetForm() {
+        // NOVO: Resetar o campo do nome
+        const userNameInput = document.getElementById('userName');
+        if (userNameInput) {
+            userNameInput.value = '';
+        }
+
         this.responses = {};
         this.questions.forEach(question => {
             const thumb = document.getElementById(`thumb-${question.id}`);
             const valueDisplay = document.getElementById(`value-${question.id}`);
             const input = document.getElementById(`input-${question.id}`);
             
-            thumb.style.left = '50%';
-            valueDisplay.textContent = '50';
-            input.value = '50';
-            this.responses[question.id] = 50;
+            if (thumb && valueDisplay && input) { // Adicionado verificação para garantir que os elementos existem
+                thumb.style.left = '50%';
+                valueDisplay.textContent = '50';
+                input.value = '50';
+                this.responses[question.id] = 50;
+            }
         });
     }
 }
