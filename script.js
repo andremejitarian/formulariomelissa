@@ -1,7 +1,7 @@
 class PsychologySurvey {
-    // IMPORTANTE: SUBSTITUA ESTA URL PELA URL DO SEU WEBHOOK DO N8N
-    static WEBHOOK_URL = 'https://andremejitarian--antigravity-webhook-fastapi-app.modal.run/api/webhooks/production/melissa'; 
-    static WEBHOOK_URL = 'https://andremejitarian--antigravity-webhook-fastapi-app.modal.run/api/webhooks/production/melissa'; 
+    // Relay público do gateway pranna-webhook-server → dispara a task `melissa`
+    // (projeto central) no Trigger.dev. Rota com allowlist, sem secret no client.
+    static WEBHOOK_URL = 'https://andremejitarian--pranna-webhook-server-fastapi-app.modal.run/api/forms/central/melissa';
 
     constructor() {
         this.questions = [];
