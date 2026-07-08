@@ -225,9 +225,8 @@ class PsychologySurvey {
             });
 
             if (response.ok) { // Verifica se a resposta HTTP foi bem-sucedida (status 200-299)
-                alert('✅ Respostas enviadas com sucesso!\n\nObrigado por participar da pesquisa.');
-                console.log('Resposta do Webhook:', await response.json()); // Mostra a resposta do n8n (pode ser um JSON)
-                this.resetForm(); // Reseta o formulário após o sucesso
+                console.log('Resposta do Webhook:', await response.json()); // Mostra a resposta do webhook
+                this.showSuccessScreen(); // Confirmação visível na página (substitui o alert)
             } else {
                 // Trata erros de resposta HTTP (ex: 400, 500)
                 const errorData = await response.json(); // Tenta ler a resposta de erro como JSON
@@ -258,6 +257,24 @@ class PsychologySurvey {
             </div>
         `;
         this.hideLoading();
+    }
+
+    showSuccessScreen() {
+        // Esconde o formulário e o conteúdo introdutório, deixando só a confirmação visível.
+        const toHide = [
+            document.getElementById('survey-form'),
+            document.querySelector('.instructions-section'),
+            document.querySelector('.header'),
+        ];
+        toHide.forEach((el) => el && el.classList.add('hidden'));
+
+        const success = document.getElementById('success-screen');
+        if (success) {
+            success.classList.remove('hidden');
+        }
+
+        // Garante que a mensagem apareça no topo, mesmo que a pessoa tenha rolado a página.
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     resetForm() {
