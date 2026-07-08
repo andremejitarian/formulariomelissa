@@ -35,7 +35,7 @@ function hide(id) { document.getElementById(id).classList.add("hidden"); }
 async function load() {
     try {
         const [reportRes, questionsRes] = await Promise.all([
-            fetch(`${SUPABASE_URL}/rest/v1/melissa_report?id=eq.arcs&select=data,updated_at`, {
+            fetch(`${SUPABASE_URL}/rest/v1/melissa_report?id=eq.arcs&select=data,updated_at,narrative,narrative_generated_at`, {
                 headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
             }),
             fetch("questions.json"),
@@ -46,6 +46,7 @@ async function load() {
         const questions = await questionsRes.json();
 
         render(rows[0].data, rows[0].updated_at, questions);
+        renderNarrative(rows[0].narrative, rows[0].narrative_generated_at);
         hide("loading");
         show("report");
     } catch (err) {
@@ -193,6 +194,21 @@ function render(data, updatedAt, questions) {
 
     // ── Nota metodológica ──
     document.getElementById("method-note").innerHTML = methodNote(data, alpha);
+}
+
+function renderNarrative(text, generatedAt) {
+    const card = document.getElementById("narrative-card");
+    if (!text || !text.trim()) { card.classList.add("hidden"); return; }
+    const body = document.getElementById("narrative-body");
+    body.innerHTML = "";
+    text.trim().split(/\n{2,}|\n/).filter((p) => p.trim()).forEach((para) => {
+        const p = document.createElement("p");
+        p.textContent = para.trim();
+        body.appendChild(p);
+    });
+    const when = generatedAt ? new Date(generatedAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" }) : null;
+    document.getElementById("narrative-meta").textContent =
+        "Texto gerado automaticamente por IA" + (when ? ` em ${when}` : "") + " · leitura preliminar, a ser validada pela pesquisadora.";
 }
 
 function alphaLabel(a) {

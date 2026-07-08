@@ -108,6 +108,10 @@
         .heat-legend { display: flex; align-items: center; justify-content: center; gap: .5rem; margin-top: 1rem; color: var(--text-secondary); font-size: .82rem; }
         .heat-legend .bar { width: 180px; height: 12px; border-radius: 6px; background: linear-gradient(90deg, var(--div-neg), var(--div-mid), var(--div-pos)); }
 
+        .narrative p { font-size: 1.02rem; color: var(--text-primary); margin-bottom: .9rem; }
+        .narrative p:last-child { margin-bottom: 0; }
+        .narrative-meta { color: var(--muted); font-size: .8rem; margin-top: 1rem; font-style: italic; }
+        #narrative-card.hidden { display: none !important; }
         .note { color: var(--text-secondary); font-size: .9rem; }
         .note ul { margin: .5rem 0 0 1.1rem; }
         .note li { margin-bottom: .35rem; }
@@ -153,6 +157,13 @@
                     <div class="value tabular" id="kpi-alpha">—</div>
                     <div class="foot" id="kpi-alpha-foot">α de Cronbach</div>
                 </div>
+            </div>
+
+            <div class="card" id="narrative-card">
+                <h2>Leitura do pesquisador</h2>
+                <p class="hint">Interpretação dos resultados no papel de um pesquisador da área, atualizada mensalmente.</p>
+                <div id="narrative-body" class="narrative"></div>
+                <p class="narrative-meta" id="narrative-meta"></p>
             </div>
 
             <div class="card">
