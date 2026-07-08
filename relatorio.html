@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório — Questionário ARCS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --surface: #fcfcfb;
+            --plane: #f9f9f7;
+            --text-primary: #0b0b0b;
+            --text-secondary: #52514e;
+            --muted: #898781;
+            --grid: #e1e0d9;
+            --baseline: #c3c2b7;
+            --border: rgba(11,11,11,0.10);
+            --series-1: #2a78d6;
+            --good: #0ca30c;
+            --div-pos: #2a78d6;  /* correlação positiva */
+            --div-neg: #e34948;  /* correlação negativa */
+            --div-mid: #f0efec;
+            --radius: 14px;
+            --radius-sm: 10px;
+            --shadow: 0 1px 2px rgba(0,0,0,.05), 0 8px 24px -12px rgba(0,0,0,.12);
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --surface: #1a1a19;
+                --plane: #0d0d0d;
+                --text-primary: #ffffff;
+                --text-secondary: #c3c2b7;
+                --muted: #898781;
+                --grid: #2c2c2a;
+                --baseline: #383835;
+                --border: rgba(255,255,255,0.10);
+                --series-1: #3987e5;
+                --good: #0ca30c;
+                --div-pos: #3987e5;
+                --div-neg: #e66767;
+                --div-mid: #383835;
+            }
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--plane);
+            color: var(--text-primary);
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+        }
+        .wrap { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+
+        header.report-header { margin-bottom: 2rem; }
+        header.report-header h1 { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.02em; }
+        header.report-header .sub { color: var(--text-secondary); font-size: 1.02rem; margin-top: .35rem; }
+        .updated { color: var(--muted); font-size: .85rem; margin-top: .5rem; }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .card h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: .35rem; }
+        .card .hint { color: var(--text-secondary); font-size: .9rem; margin-bottom: 1.1rem; }
+
+        /* KPIs */
+        .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .kpi {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow);
+            padding: 1.1rem 1.2rem;
+        }
+        .kpi .label { color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; font-weight: 500; }
+        .kpi .value { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; margin-top: .25rem; }
+        .kpi .value.tabular { font-variant-numeric: tabular-nums; }
+        .kpi .foot { color: var(--text-secondary); font-size: .82rem; margin-top: .15rem; }
+        @media (max-width: 760px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+
+        .chart-box { position: relative; width: 100%; }
+        .chart-box.tall { height: 620px; }
+        .chart-box.mid { height: 320px; }
+
+        /* Explorador por item */
+        .item-controls { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        select {
+            font: inherit; padding: .5rem .8rem; border-radius: var(--radius-sm);
+            border: 1px solid var(--baseline); background: var(--surface); color: var(--text-primary);
+            max-width: 100%;
+        }
+        .item-statement { font-size: 1.02rem; font-weight: 500; margin-bottom: .25rem; }
+        .item-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; color: var(--text-secondary); font-size: .9rem; margin-top: 1rem; }
+        .item-stats b { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+        .item-anchors { display: flex; justify-content: space-between; color: var(--muted); font-size: .82rem; margin-top: .4rem; }
+
+        /* Heatmap correlação */
+        .heat-scroll { overflow-x: auto; }
+        table.heat { border-collapse: collapse; margin: 0 auto; }
+        table.heat th { font-size: .62rem; color: var(--muted); font-weight: 500; padding: 2px; }
+        table.heat th.col { writing-mode: vertical-rl; transform: rotate(180deg); height: 34px; }
+        table.heat td.cell { width: 22px; height: 22px; border: 1px solid var(--surface); border-radius: 3px; cursor: default; }
+        .heat-legend { display: flex; align-items: center; justify-content: center; gap: .5rem; margin-top: 1rem; color: var(--text-secondary); font-size: .82rem; }
+        .heat-legend .bar { width: 180px; height: 12px; border-radius: 6px; background: linear-gradient(90deg, var(--div-neg), var(--div-mid), var(--div-pos)); }
+
+        .note { color: var(--text-secondary); font-size: .9rem; }
+        .note ul { margin: .5rem 0 0 1.1rem; }
+        .note li { margin-bottom: .35rem; }
+        .badge { display: inline-block; padding: .12rem .5rem; border-radius: 999px; font-size: .78rem; font-weight: 600; }
+
+        .loading, .errorbox { text-align: center; padding: 3rem 1rem; color: var(--text-secondary); }
+        .errorbox { color: var(--div-neg); }
+        .hidden { display: none !important; }
+
+        footer { color: var(--muted); font-size: .82rem; text-align: center; margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header class="report-header">
+            <h1>📊 Relatório de Respostas — Questionário ARCS</h1>
+            <p class="sub">Atitudes em Relação ao Comportamento Suicida · análise agregada e anônima</p>
+            <p class="updated" id="updated"></p>
+        </header>
+
+        <div id="loading" class="loading">Carregando dados…</div>
+        <div id="error" class="errorbox hidden"></div>
+
+        <div id="report" class="hidden">
+            <div class="kpis">
+                <div class="kpi">
+                    <div class="label">Respostas</div>
+                    <div class="value tabular" id="kpi-n">—</div>
+                    <div class="foot" id="kpi-n-foot"></div>
+                </div>
+                <div class="kpi">
+                    <div class="label">Período de coleta</div>
+                    <div class="value" id="kpi-period" style="font-size:1.15rem;">—</div>
+                    <div class="foot" id="kpi-period-foot"></div>
+                </div>
+                <div class="kpi">
+                    <div class="label">Dias com coleta</div>
+                    <div class="value tabular" id="kpi-days">—</div>
+                    <div class="foot">dias com ao menos 1 resposta</div>
+                </div>
+                <div class="kpi">
+                    <div class="label">Consistência interna</div>
+                    <div class="value tabular" id="kpi-alpha">—</div>
+                    <div class="foot" id="kpi-alpha-foot">α de Cronbach</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Coleta ao longo do tempo</h2>
+                <p class="hint">Total de respostas acumuladas a cada dia de coleta.</p>
+                <div class="chart-box mid"><canvas id="chart-time"></canvas></div>
+            </div>
+
+            <div class="card">
+                <h2>Concordância média por item</h2>
+                <p class="hint">Média de cada afirmação na escala 0 (Discordo) a 100 (Concordo), ordenada da maior para a menor. Passe o mouse para ver a afirmação completa e o desvio-padrão.</p>
+                <div class="chart-box tall"><canvas id="chart-ranking"></canvas></div>
+            </div>
+
+            <div class="card">
+                <h2>Distribuição de um item</h2>
+                <p class="hint">Como as respostas se distribuem ao longo da escala para a afirmação escolhida.</p>
+                <div class="item-controls">
+                    <label for="item-select">Afirmação:</label>
+                    <select id="item-select"></select>
+                </div>
+                <p class="item-statement" id="item-statement"></p>
+                <div class="chart-box mid"><canvas id="chart-hist"></canvas></div>
+                <div class="item-anchors"><span id="anchor-left"></span><span id="anchor-right"></span></div>
+                <div class="item-stats">
+                    <span>Média: <b id="stat-mean">—</b></span>
+                    <span>Mediana: <b id="stat-median">—</b></span>
+                    <span>Desvio-padrão: <b id="stat-sd">—</b></span>
+                    <span>Respostas: <b id="stat-n">—</b></span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Correlação entre itens</h2>
+                <p class="hint">Grau de associação entre cada par de afirmações (coeficiente de Pearson). Azul = variam juntas; vermelho = variam em sentidos opostos. Útil para identificar afirmações que medem uma mesma atitude.</p>
+                <div class="heat-scroll"><div id="heatmap"></div></div>
+                <div class="heat-legend"><span>−1</span><span class="bar"></span><span>+1</span></div>
+            </div>
+
+            <div class="card">
+                <h2>Nota metodológica</h2>
+                <div class="note" id="method-note"></div>
+            </div>
+        </div>
+
+        <footer>Relatório gerado automaticamente a partir das respostas · dados anônimos e agregados</footer>
+    </div>
+
+    <script src="relatorio.js"></script>
+</body>
+</html>
